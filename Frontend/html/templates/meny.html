@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleheader.css') }}">
+</head>
+<body>
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="#" class="logo">logo</a>
+        <ul id="nav-links">
+            <li><a href="#Login">Login</a></li>
+            <li><a href="#Signin">Sign In</a></li>
+            <li><a href="#Shop">Shop</a></li>
+            <li><a href="#Cart">Cart</a></li>
+        </ul>        
+        <!-- Hamburger Menu Icon -->
+        <div class="menu-icon" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+    {% block body %}
+    {% endblock %}
+</body>
+<script src="/js/hamb.js"></script>
+</html>
+

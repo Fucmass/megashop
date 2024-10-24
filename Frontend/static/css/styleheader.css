@@ -1,0 +1,105 @@
+/* Reset some default margins and paddings */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Styling the body to center content and give a basic font */
+body {
+    font-family: Arial, sans-serif;
+}
+
+/* Navbar container */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #333;  /* Dark background */
+    padding: 25px 125px;
+}
+
+/* Logo styling */
+.navbar .logo {
+    font-size: 24px;
+    color: #fff;  /* White text for the logo */
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* Nav links container */
+#nav-links {
+    display: flex;
+    list-style: none;
+}
+
+/* Nav links styling */
+#nav-links li {
+    margin-left: 20px;
+}
+
+#nav-links a {
+    color: #fff; /* White text for links */
+    text-decoration: none;
+    font-size: 18px;
+    transition: color 0.3s ease;
+}
+
+#nav-links a:hover {
+    color: #f0a500; /* Orange-ish color on hover */
+}
+
+/* Hamburger menu icon (three bars) */
+.menu-icon {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+}
+
+.menu-icon div {
+    width: 25px;
+    height: 3px;
+    background-color: #fff; /* White color for hamburger bars */
+    margin: 4px 0;
+    transition: all 0.3s ease;
+}
+
+/* Media query for mobile view */
+@media (max-width: 768px) {
+    /* Hide nav links and show hamburger icon on mobile */
+    #nav-links {
+        display: none;
+        position: absolute;
+        top: 50px;
+        right: 0;
+        background-color: #333;
+        width: 100%;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #nav-links li {
+        margin: 15px 0;
+    }
+
+    .menu-icon {
+        display: flex;
+    }
+
+    .menu-icon.active div:nth-child(1) {
+        transform: rotate(45deg) translate(5px, 5px);
+    }
+
+    .menu-icon.active div:nth-child(2) {
+        opacity: 0;
+    }
+
+    .menu-icon.active div:nth-child(3) {
+        transform: rotate(-45deg) translate(6px, -6px);
+    }
+
+    /* Show nav links when hamburger menu is toggled */
+    #nav-links.active {
+        display: flex;
+    }
+}
