@@ -27,9 +27,22 @@ def serve_js(filename):
 def index():
     return render_template('index.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+@app.route('/shop')
+def shop():
+    return render_template('shop.html')
+
+@app.route('/cart')
+def cart():
+    return render_template('cart.html')
+
 # Route to add a user to the database
 @app.route('/add_user', methods=['POST'])
 def add_user():
+    print("test")
     data = request.json
     first_name = data.get('first_name')
     last_name = data.get('last_name')

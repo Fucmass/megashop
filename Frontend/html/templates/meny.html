@@ -4,17 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styleheader.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylemeny.css') }}">
 </head>
 <body>
     <!-- Navbar -->
     <nav class="navbar">
-        <a href="#" class="logo">logo</a>
+        <a href="/" class="logo">logo</a>
         <ul id="nav-links">
-            <li><a href="#Login">Login</a></li>
-            <li><a href="#Signin">Sign In</a></li>
-            <li><a href="#Shop">Shop</a></li>
-            <li><a href="#Cart">Cart</a></li>
+            <li><a href="/login">Login</a></li>
+            <li><a href="/shop">Shop</a></li>
+            <li><a href="/cart">Cart</a></li>
         </ul>        
         <!-- Hamburger Menu Icon -->
         <div class="menu-icon" onclick="toggleMenu()">
@@ -25,6 +24,17 @@
     </nav>
     {% block body %}
     {% endblock %}
+    <!-- Footer -->
+    <footer class="foot">
+        <div class="footer-li">
+            <ul id="footer-li1">
+                <p></p>
+            </ul>
+            <ul id="footer-li2">
+
+            </ul>
+        </div>
+    </footer>
 </body>
 <script src="/js/hamb.js"></script>
 </html>
