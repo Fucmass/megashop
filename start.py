@@ -42,14 +42,13 @@ def cart():
 # Route to add a user to the database
 @app.route('/add_user', methods=['POST'])
 def add_user():
-    print("test")
     data = request.json
     first_name = data.get('first_name')
     last_name = data.get('last_name')
     email = data.get('email')
     password = data.get('password')
     phone_number = data.get('phone_number')
-
+    print(data)
     # Basic validation
     if not all([first_name, last_name, email, password]):
         return jsonify({"error": "Missing required fields"}), 400

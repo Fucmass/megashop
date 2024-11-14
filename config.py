@@ -1,15 +1,12 @@
 import os
 
 class Config:
-    MYSQL_HOST = os.getenv("MYSQL_HOST", "10.2.3.221")
+    # MySQL database connection details from environment variables
+    MYSQL_HOST = os.getenv("MYSQL_HOST", "10.2.3.221")  # Use the name of the environment variable
     MYSQL_USER = os.getenv("MYSQL_USER", "Aron")
     MYSQL_PASSWORD = os.getenv("MYSQL_PASSWORD", "pppppppppp")
     MYSQL_DB = os.getenv("MYSQL_DB", "megashop")
-    MYSQL_PORT = 3306
+    MYSQL_CURSORCLASS = 'DictCursor'  # So results will be in dict format
 
-
-    # Print for debugging (excluding sensitive data)
-    print(f"Using MySQL Host: {MYSQL_HOST}, Database: {MYSQL_DB}")
-
-# Example usage for connection (with PyMySQL or mysql-connector-python)
-import pymysql  # or import mysql.connector
+    # Debugging: Print the values (for testing purposes, but do not expose sensitive data in production)
+    print(f"Using MySQL Host: {MYSQL_HOST} USER: {MYSQL_USER} PASSWORD {MYSQL_PASSWORD} Database: {MYSQL_DB}")
