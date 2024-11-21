@@ -1,8 +1,8 @@
 {% extends 'meny.html' %}
 
 {% block body %}
-<h1>Login</h1>
-<form id="loginForm">
+<h1>Signup</h1>
+<form id="signupForm">
     <label for="first_name">First Name:</label>
     <input type="text" id="first_name" name="first_name" required><br><br>
 
@@ -18,11 +18,11 @@
     <label for="phone_number">Phone Number:</label>
     <input type="number" id="phone_number" name="phone_number" required><br><br>
 
-    <button type="submit">Login</button>
+    <button type="submit">Signup</button>
 </form>
 <div id="responseMessage"></div>
 <script>
-    document.getElementById("loginForm").addEventListener("submit", async function (event) {
+    document.getElementById("signupForm").addEventListener("submit", async function (event) {
         event.preventDefault(); // Prevent traditional form submission
 
         // Gather form data
@@ -36,7 +36,7 @@
 
         try {
             // Send data as JSON in a POST request
-            const response = await fetch("/login", {
+            const response = await fetch("/signup", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"

@@ -47,22 +47,23 @@ def shop():
 def cart():
     return render_template('cart.html')
 
-# Route to render the login page
-@app.route('/login', methods=['GET'])
-def login_page():
-    return render_template('login.html')
+# Route to render the signup page
+@app.route('/signup', methods=['GET'])
+def signup_page():
+    return render_template('signup.html')
 
-# Route to handle login form submission
-@app.route('/login', methods=['POST'])
-def login():
+# Route to handle signup form submission
+@app.route('/signup', methods=['POST'])
+def signup():
     try:
         # Parse JSON data from the request
-        login_info = request.json
-        first_name = login_info.get('first_name')
-        last_name = login_info.get('last_name')
-        email = login_info.get('email')
-        password = login_info.get('password')
-        phone_number = login_info.get('phone_number')
+        signup_info = request.json  # Corrected variable name
+        first_name = signup_info.get('first_name')
+        last_name = signup_info.get('last_name')
+        email = signup_info.get('email')
+        password = signup_info.get('password')
+        phone_number = signup_info.get('phone_number')
+
 
         # Validate inputs
         if not all([first_name, last_name, email, password, phone_number]):
