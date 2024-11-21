@@ -1,31 +1,29 @@
 {% extends 'meny.html' %}
 
 {% block body %}
-
-<h1>login page works</h1>
-
-<form id="registerForm">
+<h1>Login</h1>
+<form id="loginForm">
     <label for="first_name">First Name:</label>
     <input type="text" id="first_name" name="first_name" required><br><br>
 
     <label for="last_name">Last Name:</label>
     <input type="text" id="last_name" name="last_name" required><br><br>
 
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" required><br><br>
-
     <label for="password">Password:</label>
     <input type="password" id="password" name="password" required><br><br>
 
-    <label for="phone_number">Phone Number:</label>
-    <input type="tel" id="phone_number" name="phone_number"><br><br>
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required><br><br>
 
-    <button type="submit">Register</button>
+    <label for="phone_number">Phone Number:</label>
+    <input type="number" id="phone_number" name="phone_number" required><br><br>
+
+    <button type="submit">Login</button>
 </form>
 <div id="responseMessage"></div>
 <script>
-    document.getElementById("registerForm").addEventListener("submit", async function (event) {
-        event.preventDefault(); // Prevent form from submitting traditionally
+    document.getElementById("loginForm").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent traditional form submission
 
         // Gather form data
         const formData = {
@@ -38,7 +36,7 @@
 
         try {
             // Send data as JSON in a POST request
-            const response = await fetch("http://localhost:5001/add_user", {
+            const response = await fetch("/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -56,5 +54,4 @@
         }
     });
 </script>
-
 {% endblock %}
