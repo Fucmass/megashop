@@ -2,6 +2,7 @@ from flask import Flask, render_template, send_from_directory, request, jsonify
 from dotenv import load_dotenv
 import mysql.connector
 import os
+from werkzeug.security import generate_password_hash, check_password_hash  # Import from werkzeug.security
 
 load_dotenv()
 
@@ -47,6 +48,12 @@ def shop():
 def cart():
     return render_template('cart.html')
 
+@app.route('/login')
+def login():
+    return render_template('login.html')
+
+
+
 # Route to render the signup page
 @app.route('/signup', methods=['GET'])
 def signup_page():
@@ -57,17 +64,19 @@ def signup_page():
 def signup():
     try:
         # Parse JSON data from the request
-        signup_info = request.json  # Corrected variable name
+        signup_info = request.json
         first_name = signup_info.get('first_name')
         last_name = signup_info.get('last_name')
         email = signup_info.get('email')
         password = signup_info.get('password')
         phone_number = signup_info.get('phone_number')
 
-
         # Validate inputs
         if not all([first_name, last_name, email, password, phone_number]):
             return jsonify({"error": "All fields are required"}), 400
+
+        # Hash the password
+        hashed_password = generate_password_hash(password)
 
         # Connect to the database
         db = get_db_connection()
@@ -80,14 +89,13 @@ def signup():
                 if existing_user:
                     return jsonify({"error": "User with this email already exists"}), 409
 
-
                 # Insert new user into the database
                 cursor.execute(
                     """
                     INSERT INTO users (first_name, last_name, email, password, phone_number)
                     VALUES (%s, %s, %s, %s, %s)
                     """,
-                    (first_name, last_name, email, password, phone_number)
+                    (first_name, last_name, email, hashed_password, phone_number)
                 )
                 db.commit()
 
