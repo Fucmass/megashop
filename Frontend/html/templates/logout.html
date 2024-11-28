@@ -1,0 +1,36 @@
+{% extends 'meny.html' %}
+
+{% block body %}
+
+<div class="logout-container">
+    <h1>You are about to log out</h1>
+    <p>Are you sure you want to log out?</p>
+    
+    <!-- Button triggers the logout POST request -->
+    <button onclick="logoutUser()">Confirm Logout</button>
+    
+    <!-- Link to cancel and return to the homepage -->
+    <a href="/">Cancel</a>
+</div>
+
+<script>
+    function logoutUser() {
+        fetch('/logout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then(response => {
+            if (response.ok) {
+                // Redirect to homepage or login page after successful logout
+                window.location.href = '/';
+            } else {
+                alert('Error logging out.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
+
+{% endblock %}

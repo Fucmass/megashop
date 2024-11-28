@@ -11,9 +11,17 @@
     <nav class="navbar">
         <a href="/" class="logo">logo</a>
         <ul id="nav-links">
-            <li><a href="/login">Login</a></li>
-            <li><a href="/shop">Shop</a></li>
-            <li><a href="/cart">Cart</a></li>
+            {% if session.get('user_id') %}
+                <li>Welcome, {{ session.get('first_name') }}</li>
+                <li><a href="/logout" onclick="logoutUser()">Logout</a></li>
+                <li><a href="/profile">Profile</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/cart">Cart</a></li>
+            {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/shop">Shop</a></li>
+                <li><a href="/cart">Cart</a></li>
+            {% endif %}
         </ul>        
         <!-- Hamburger Menu Icon -->
         <div class="menu-icon" onclick="toggleMenu()">

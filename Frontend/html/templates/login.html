@@ -1,15 +1,51 @@
 {% extends 'meny.html' %}
 
 {% block body %}
-<label for="email">Email:</label>
-<input type="text" id="email_login" name="email_login" required>
+<form id="loginForm">
+    <label for="email">Email:</label>
+    <input type="text" id="email" name="email" required><br><br>
+    
+    <label for="password">Password:</label>
+    <input type="password" id="password" name="password" required><br><br>
 
-<label for="password">Password:</label>
-<input type="password" id="password_login" name="password_login" required>
+    <button type="submit">Login</button>
+</form>
+<h3>If you dont have an account <a href="/signup">sign up here</a>.</h3>
+<div id="responseMessage"></div>
 
+<script>
+    document.getElementById("loginForm").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent traditional form submission
 
-<p>Har du ikke en bruker kan du <a href="/signup">trykke har</a> for å opprette en bruker</p>
+        // Gather form data
+        const formData = {
+            email: document.getElementById("email").value,
+            password: document.getElementById("password").value,
+        };
 
+        try {
+            // Send data as JSON in a POST request to the /login endpoint
+            const response = await fetch("/login", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
 
+            const result = await response.json();
 
+            // Display the response message
+            document.getElementById("responseMessage").textContent = result.message || result.error;
+
+            // Handle successful login (redirect or update UI)
+            if (response.ok) {
+                window.location.href = "/shop"; // Redirect to the shop page after successful login
+            }
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById("responseMessage").textContent = "An error occurred. Please try again.";
+        }
+    });
+</script>
 {% endblock %}

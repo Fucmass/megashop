@@ -11,5 +11,3 @@
         phone_number VARCHAR(20),  -- Optional
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-
-    

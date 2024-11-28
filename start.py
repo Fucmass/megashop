@@ -1,17 +1,25 @@
-from flask import Flask, render_template, send_from_directory, request, jsonify
+from flask import Flask, render_template, send_from_directory, request, jsonify, session, redirect, url_for
 from dotenv import load_dotenv
 import mysql.connector
 import os
-from werkzeug.security import generate_password_hash, check_password_hash  # Import from werkzeug.security
+from werkzeug.security import generate_password_hash, check_password_hash
 
 load_dotenv()
 
-# Define the path to the custom templates and static folders
+# Define paths for custom templates and static files
 template_path = os.path.join('Frontend', 'html', 'templates')
 static_path = os.path.join('Frontend', 'static')
 
-# Initialize the Flask app
+# Initialize Flask app
 app = Flask(__name__, template_folder=template_path, static_folder=static_path)
+
+# Secret key for session management
+app.secret_key = os.getenv('SECRET_KEY', 'default_secret_key')
+
+# Secure session cookie settings
+app.config['SESSION_COOKIE_HTTPONLY'] = True
+app.config['SESSION_COOKIE_SECURE'] = False  # Set to True in production with HTTPS
+app.config['SESSION_COOKIE_SAMESITE'] = 'Lax'
 
 # Database configuration
 db_config = {
@@ -29,6 +37,7 @@ def get_db_connection():
     except mysql.connector.Error as e:
         print(f"Error connecting to database: {e}")
         return None
+
 
 # Route to serve JS files from the Backend/js directory
 @app.route('/js/<path:filename>')
@@ -48,9 +57,71 @@ def shop():
 def cart():
     return render_template('cart.html')
 
-@app.route('/login')
-def login():
+@app.route('/login', methods=['GET'])
+def login_page():
     return render_template('login.html')
+
+# Login route
+@app.route('/login', methods=['POST'])
+def login():
+    login_info = request.json
+    email = login_info.get('email')
+    password = login_info.get('password')
+
+    if not all([email, password]):
+        return jsonify({"error": "Email and password are required"}), 400
+
+    db = get_db_connection()
+    if db:
+        cursor = db.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT * FROM users WHERE email = %s", (email,))
+            user = cursor.fetchone()
+
+            if not user or not check_password_hash(user['password'], password):
+                return jsonify({"error": "Invalid credentials"}), 401
+
+            # Check if 'id' key exists
+            if 'user_id' in user:
+                session['user_id'] = user['user_id']
+                session['email'] = user['email']
+                session['first_name'] = user.get('first_name', 'Guest')  # Default if missing
+
+                return jsonify({"message": "Login successful!"}), 200
+            else:
+                return jsonify({"error": "User data is incomplete"}), 500
+
+        except mysql.connector.Error as e:
+            return jsonify({"error": f"Database operation failed: {e}"}), 500
+        finally:
+            cursor.close()
+            db.close()
+    else:
+        return jsonify({"error": "Database connection failed"}), 500
+
+@app.route('/logout', methods=['GET'])
+def logout_page():
+    return render_template('logout.html')
+
+# Logout route
+@app.route('/logout', methods=['POST'])
+def logout():
+    session.clear()
+    return jsonify({"message": "Logged out successfully!"}), 200
+
+# Route to check if user is logged in
+@app.route('/is_logged_in', methods=['GET'])
+def is_logged_in():
+    if 'user_id' in session:
+        return jsonify({
+            "message": "User is logged in",
+            "user": {
+                "id": session['user_id'],
+                "email": session['email'],
+                "first_name": session['first_name']
+            }
+        }), 200
+    return jsonify({"message": "User is not logged in"}), 401
 
 
 
