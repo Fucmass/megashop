@@ -48,6 +48,10 @@
 
             // Display the response message
             document.getElementById("responseMessage").textContent = result.message || result.error;
+
+            if (response.ok) {
+                window.location.href = "/login";
+            }
         } catch (error) {
             console.error("Error:", error);
             document.getElementById("responseMessage").textContent = "An error occurred. Please try again.";
