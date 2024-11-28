@@ -1,6 +1,6 @@
-    CREATE DATABASE IF NOT EXISTS minishop;
+    CREATE DATABASE IF NOT EXISTS megashop;
 
-    USE minishop;
+    USE megashop;
 
     CREATE TABLE IF NOT EXISTS users (
         user_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -11,5 +11,3 @@
         phone_number VARCHAR(20),  -- Optional
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     );
-
-    
