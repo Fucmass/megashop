@@ -70,7 +70,7 @@ body {
     #nav-links {
         display: none;
         position: absolute;
-        top: 50px;
+        top: 75px;
         right: 0;
         background-color: #333;
         width: 100%;
@@ -79,7 +79,7 @@ body {
     }
 
     #nav-links li {
-        margin: 15px 0;
+        margin: 20px 0;
     }
 
     .menu-icon {
@@ -87,7 +87,7 @@ body {
     }
 
     .menu-icon.active div:nth-child(1) {
-        transform: rotate(45deg) translate(5px, 5px);
+        transform: rotate(45deg) translate(5.5px, 5.5px);
     }
 
     .menu-icon.active div:nth-child(2) {
@@ -95,7 +95,7 @@ body {
     }
 
     .menu-icon.active div:nth-child(3) {
-        transform: rotate(-45deg) translate(6px, -6px);
+        transform: rotate(-45deg) translate(10px, -10px);
     }
 
     /* Show nav links when hamburger menu is toggled */
@@ -103,3 +103,4 @@ body {
         display: flex;
     }
 }
+
