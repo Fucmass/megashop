@@ -53,6 +53,10 @@ def index():
 def shop():
     return render_template('shop.html')
 
+@app.route('/profile')
+def profile():
+    return render_template('profile.html')
+
 @app.route('/cart')
 def cart():
     return render_template('cart.html')

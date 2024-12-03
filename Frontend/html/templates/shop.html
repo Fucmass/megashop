@@ -2,6 +2,12 @@
 
 {% block body %}
 
-<h1>Shop page works</h1>
+{% if session.get('user_id') %}
+                <div class="items">
+                    
+                </div>
+            {% else %}
+                <p>please <a href="/login">login</a> to see the Shop</p>
+            {% endif %}
 
 {% endblock %}
