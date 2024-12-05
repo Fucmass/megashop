@@ -2,10 +2,27 @@
 
 {% block body %}
 
+<link rel="stylesheet" href="styles/shop.css">
+
 {% if session.get('user_id') %}
-                <div class="items">
-                    
+                {% if products %}
+                <div class="products">
+            
+                    {% for product in products %}
+                    <div class="product-columns">
+                        <div class="product-card">
+                            <img style="background-image: url('https://lh6.googleusercontent.com/proxy/69hY047ugRtAxkZlXFk9coNyeuZy8A--2lI78NeG0QQFyoe3p-_b92mpnq90TJCL');">
+                            <span class="brand">{{ product.brand }}</span>
+                            <span class="name">{{ product.product_name }}</span>
+                            <span class="price">$ {{ product.price }}</span>
+                        </div>
+                    </div>
+                    {% endfor %}
+
                 </div>
+                {% else %}
+                    <p>No products available for your search</p>
+                {% endif %}
             {% else %}
                 <p>please <a href="/login">login</a> to see the Shop</p>
             {% endif %}

@@ -23,4 +23,4 @@ CREATE TABLE IF NOT EXISTS products (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
-INSERT INTO products('product_id', 'brand', 'product_name', 'price', 'stock')
+INSERT INTO products (brand, product_name, price, stock) VALUES ('...', '...', '...', '...');

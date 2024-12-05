@@ -39,6 +39,10 @@ def get_db_connection():
         return None
 
 
+@app.route('/styles/<path:filename>')
+def serve_styles(filename):
+    return send_from_directory('frontend/static/css', filename)
+
 # Route to serve JS files from the Backend/js directory
 @app.route('/js/<path:filename>')
 def serve_js(filename):
@@ -51,7 +55,22 @@ def index():
 
 @app.route('/shop')
 def shop():
-    return render_template('shop.html')
+    db = get_db_connection()
+    if db:
+        cursor = db.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT product_id, brand, product_name, price, stock FROM products")
+            products = cursor.fetchall()  # Fetch all products as a list of dictionaries
+        except mysql.connector.Error as e:
+            print(f"Database query failed: {e}")
+            products = []
+        finally:
+            cursor.close()
+            db.close()
+    else:
+        products = []
+
+    return render_template('shop.html', products=products)
 
 @app.route('/profile')
 def profile():
