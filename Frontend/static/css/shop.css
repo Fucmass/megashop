@@ -33,6 +33,21 @@
     background-size: contain;
 }
 
+@media (max-width: 1240px) {
+    .product-columns{
+        box-sizing: border-box;
+        padding: 5px;
+        width: calc(100% / 3);
+    }
+}
+
+@media (max-width: 768px) {
+    .product-columns{
+        box-sizing: border-box;
+        padding: 5px;
+        width: calc(100% / 2);
+    }
+}
 
 
 
