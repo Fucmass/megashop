@@ -72,6 +72,23 @@ def shop():
 
     return render_template('shop.html', products=products)
 
+@app.route('/products/<int:product_id>')
+def load_product(product_id):
+    conn = get_db_connection()
+    try:
+        cursor = conn.cursor(dictionary=True)  # Use dictionary=True for row as dict
+        cursor.execute('SELECT * FROM products WHERE product_id = %s', (product_id,))
+        products = cursor.fetchone()
+        cursor.close()
+    finally:
+        conn.close()
+
+    if products is None:
+        return jsonify({"error": "Product Not Found"}), 404
+
+    # Pass the item data to the HTML template
+    return render_template('products.html', products=products)
+
 @app.route('/profile')
 def profile():
     return render_template('profile.html')
