@@ -11,6 +11,7 @@
     {% for product in products %}
     <div class="product-columns">
         <div class="product-card">
+            <a href="/products/{{ product.product_id }}"></a>
             <img
                 style="background-image: url('https://lh6.googleusercontent.com/proxy/69hY047ugRtAxkZlXFk9coNyeuZy8A--2lI78NeG0QQFyoe3p-_b92mpnq90TJCL');">
 
@@ -22,7 +23,6 @@
 
                 <span class="price">$ {{ product.price }}</span>
             </div>
-            <a href="/products/{{ product.product_id }}"></a>
         </div>
     </div>
     {% endfor %}
