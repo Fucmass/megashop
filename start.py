@@ -1,4 +1,5 @@
 from flask import Flask, render_template, send_from_directory, request, jsonify, session, redirect, url_for
+from functools import wraps
 from dotenv import load_dotenv
 import mysql.connector
 import os
@@ -48,6 +49,51 @@ def serve_styles(filename):
 def serve_js(filename):
     return send_from_directory('Backend/js', filename)
 
+# Custom authentication decorator
+def is_authenticated(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if 'user_id' not in session:
+            return redirect('/') # Redirect to login page
+        return f(*args, **kwargs)
+    return decorated_function
+
+from functools import wraps
+from flask import session, redirect
+import mysql.connector
+
+def is_admin(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        # Ensure the database connection is established properly
+        try:
+            db = get_db_connection()
+            cursor = db.cursor(dictionary=True)  # Assuming `db` is a valid MySQL connection object
+            user_id = session.get('user_id')  # Use `get` to avoid KeyError
+            
+            if not user_id:
+                return redirect('/')  # Redirect if no user is logged in
+            
+            # Query to check user role
+            cursor.execute("SELECT role FROM users WHERE user_id = %s", (user_id,))
+            user = cursor.fetchone()  # Fetch one record
+            
+            # Check if the user is an admin
+            if not user or user.get('role') != 'admin':
+                return redirect('/')  # Redirect to the home page if not an admin
+            
+        except mysql.connector.Error as e:
+            print(f"Database query failed: {e}")
+            return redirect('/')  # Handle database errors gracefully
+        finally:
+            cursor.close()  # Ensure cursor is always closed
+
+        # Call the wrapped function if the user is an admin
+        return f(*args, **kwargs)
+    
+    return decorated_function
+
+
 # Home route
 @app.route('/')
 def index():
@@ -90,8 +136,82 @@ def load_product(product_id):
     return render_template('products.html', products=products)
 
 @app.route('/profile')
+@is_authenticated
 def profile():
-    return render_template('profile.html')
+    # Get the user role from the database based on session['user_id']
+    user_id = session.get('user_id')
+    db = get_db_connection()
+    if db:
+        cursor = db.cursor(dictionary=True)
+        try:
+            cursor.execute("SELECT role FROM users WHERE user_id = %s", (user_id,))
+            user = cursor.fetchone()
+            if user:
+                role = user['role']
+            else:
+                role = None
+        except mysql.connector.Error as e:
+            print(f"Database query failed: {e}")
+            role = None
+        finally:
+            cursor.close()
+            db.close()
+    else:
+        role = None
+
+    return render_template('profile.html', role=role)
+
+@app.route('/add_product')
+@is_admin
+def addProdDisplay():
+    return render_template('add_product.html')
+
+@app.route('/add_product', methods=['POST'])
+def add_product():
+    try:
+        # Parse JSON data from the request
+        product_info = request.json
+        brand = product_info.get('brand')
+        product_name = product_info.get('product_name')
+        price = product_info.get('price')
+        stock = product_info.get('stock')
+        image = product_info.get('image')
+
+        # Validate inputs
+        if not all([brand, product_name, price, stock, image]):
+            return jsonify({"error": "All fields are required"}), 400
+
+        # Connect to the database
+        db = get_db_connection()
+        if db:
+            cursor = db.cursor(dictionary=True)
+            try:
+                # Check if the product already exists
+                cursor.execute("SELECT * FROM products WHERE product_name = %s", (product_name,))
+                existing_user = cursor.fetchone()
+                if existing_user:
+                    return jsonify({"error": "User with this email already exists"}), 409
+
+                # Insert new product into the database
+                cursor.execute(
+                    """
+                    INSERT INTO products (brand, product_name, price, stock, image)
+                    VALUES (%s, %s, %s, %s, %s)
+                    """,
+                    (brand, product_name, price, stock, image)
+                )
+                db.commit()
+
+                return jsonify({"message": "product added successfully"}), 201
+            except mysql.connector.Error as e:
+                return jsonify({"error": f"Database operation failed: {e}"}), 500
+            finally:
+                cursor.close()
+                db.close()
+        else:
+            return jsonify({"error": "Database connection failed"}), 500
+    except Exception as e:
+        return jsonify({"error": f"An error occurred: {e}"}), 500
 
 @app.route('/cart')
 def cart():
@@ -140,6 +260,7 @@ def login():
         return jsonify({"error": "Database connection failed"}), 500
 
 @app.route('/logout', methods=['GET'])
+@is_authenticated
 def logout_page():
     return render_template('logout.html')
 
@@ -220,6 +341,10 @@ def signup():
             return jsonify({"error": "Database connection failed"}), 500
     except Exception as e:
         return jsonify({"error": f"An error occurred: {e}"}), 500
+
+@app.errorhandler(404)
+def page_not_found(e):
+    return render_template('404.html'), 404
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000, debug=True)

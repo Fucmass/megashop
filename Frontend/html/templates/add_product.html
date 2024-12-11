@@ -1,0 +1,58 @@
+{% extends 'profile.html' %}
+
+{% block body %}
+<h1>Add Product</h1>
+<form id="addProductForm">
+    <label for="brand">Brand Name:</label>
+    <input type="text" id="brand" name="brand" required><br><br>
+
+    <label for="product_name">Product Name:</label>
+    <input type="text" id="product_name" name="product_name" required><br><br>
+
+    <label for="price">price:</label>
+    <input type="text" id="price" name="price" required><br><br>
+
+    <label for="stock">Stock:</label>
+    <input type="text" id="stock" name="stock" required><br><br>
+
+    <label for="image">Image Url:</label>
+    <input type="text" id="image" name="image" required><br><br>
+
+    <button type="submit">Add Product</button>
+</form>
+<div id="responseMessage"></div>
+<script>
+    document.getElementById("addProductForm").addEventListener("submit", async function (event) {
+        event.preventDefault(); // Prevent traditional form submission
+
+        // Gather form data
+        const formData = {
+            brand: document.getElementById("brand").value,
+            product_name: document.getElementById("product_name").value,
+            price: document.getElementById("price").value,
+            stock: document.getElementById("stock").value,
+            image: document.getElementById("image").value
+        };
+
+        try {
+            // Send data as JSON in a POST request
+            const response = await fetch("/add_product", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(formData)
+            });
+
+            const result = await response.json();
+
+            // Display the response message
+            document.getElementById("responseMessage").textContent = result.message || result.error;
+
+        } catch (error) {
+            console.error("Error:", error);
+            document.getElementById("responseMessage").textContent = "An error occurred. Please try again.";
+        }
+    });
+</script>
+{% endblock %}
