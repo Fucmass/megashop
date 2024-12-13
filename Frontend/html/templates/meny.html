@@ -29,19 +29,41 @@
             <div></div>
         </div>
     </nav>
+    <div class="FAQ_menu" id="faq_menu">
+        <div class="blur">
+            
+        </div>
+        <div class="content">
+            <div class="text">
+                <h3>How long is delivery?</h3>
+                <p>delivery can take everything from 1 day to never, it all depends on the item and stock.</p>
+                <br>
+                <h3>The product i want isnt in stock. How long will it take until its back in stock?</h3>
+                <p>Never. Its not coming back. Everything in this shop is limited edition.</p>
+            </div>
+            <button class="close_butten" onclick="togglefaq()">Close</button>
+        </div>
+    </div>
     {% block body %}
     {% endblock %}
     <!-- Footer -->
     <footer class="foot">
         <div class="footer-li">
             <ul id="footer-li1">
-                <p></p>
+                <a onclick="togglefaq()" class="FAQ_butten">FAQs</a>
             </ul>
             <ul id="footer-li2">
 
             </ul>
         </div>
     </footer>
+    <script>
+        function togglefaq() {
+            const faqmenu = document.getElementById("faq_menu");
+
+            faqmenu.classList.toggle("show");
+        }
+    </script>
     <script src="{{ url_for('static', filename='js/hamb.js') }}"></script>
 </body>
 </html>

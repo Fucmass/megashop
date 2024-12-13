@@ -104,3 +104,102 @@ body {
     }
 }
 
+.FAQ_menu {
+    display: none;
+}
+
+.FAQ_menu.show {
+    display: flex;
+}
+
+.FAQ_menu .content {
+    display: flex;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    height: 600px;
+    width: 60%;
+    background-color: rgb(200, 215, 200);
+    z-index: 1000;
+}
+
+.FAQ_menu .blur {
+    position: fixed;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    backdrop-filter: brightness(0.5) blur(5px);
+    z-index: 900;
+}
+
+.FAQ_menu .content .close_butten {
+    background: #e74c3c;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.FAQ_menu .content .close_butten:hover {
+    background: #c0392b;
+}
+
+/* Footer container */
+.foot {
+    background-color: #333; /* Matches the navbar background */
+    color: #fff; /* White text */
+    padding: 20px 125px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100vw;
+}
+
+/* Footer links section */
+.footer-li {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+/* Individual footer columns */
+.footer-li ul {
+    list-style: none;
+    margin-right: 50px;
+}
+
+.footer-li ul a {
+    color: #fff; /* White text for links */
+    text-decoration: none;
+    font-size: 16px;
+    transition: color 0.3s ease;
+    cursor: pointer;
+}
+
+.footer-li ul a:hover {
+    color: #f0a500; /* Orange color on hover */
+}
+
+/* For responsiveness */
+@media (max-width: 768px) {
+    .foot {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .footer-li {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .footer-li ul {
+        margin-bottom: 15px;
+    }
+}
